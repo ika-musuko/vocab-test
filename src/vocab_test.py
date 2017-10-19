@@ -54,6 +54,13 @@ def Word_fromrow(row, group=''):
     rr = row.split('|')
     return Word(rr[0], float(rr[1]), rr[2], group=group)    
 
+class Choice:
+    '''
+    represents one choice
+    '''
+    def __init__(self, letter, word):
+        self.letter = letter
+        self.definition = word.definition
 
 class Question:
     '''
@@ -89,11 +96,17 @@ class Question:
         return "query: %s, score: %f, choices (%s)" % (self.query, self.score, choices)
     
     def __str__(self):
-        question = "Choose the closest description for the word %s." % self.query
+        question = self.prompt
         choices = ("\t%s. %s" % (l, c[0].definition) for l, c in zip(self.possibleletters, self.choices))
         correct = str(self.correct)
         return '\n'.join((question, *choices))
-        
+
+    def choicelist(self):
+        '''
+        individual choicelist for passing into a tpl
+        '''
+        return [c[0] for c in self.choices]
+
     def answer(self, response):
         response = response.upper()
         if response not in self.responsemap:
@@ -181,6 +194,7 @@ class Test:
         # generate the individual user question scores and the max raw score for this test
         self.questionscores = [0.0 for i in range(len(self.questions))]
         self.maxscore = sum(q.correct_word.score for q in self.questions)
+        self.totalquestions = len(self.questions)
     
     def show_words(self):
         return '\n'.join(str(q.correct_word) for q in self.questions)
@@ -190,8 +204,11 @@ class Test:
     
     def show_curr_question(self, n=-1):
         if n == -1: n = self.current
-        print("%i. %s" % (n+1, self.questions[n]))
+        print("%s" % (self.questions[n].query))
     
+    def get_curr_question(self):
+        return self.questions[self.current]
+
     def next_question(self):
         self.current += 1
     
