@@ -7,10 +7,10 @@ constants for english word database
 
 from leg import Leg
 
-ZBOUND, ZCOUNT = 1500,   5     
-ABOUND, ACOUNT = 35000,  8 
-BBOUND, BCOUNT = 36500,  4  
-CBOUND, CCOUNT = None,   3
+ZBOUND, ZCOUNT = 1500,   2     
+ABOUND, ACOUNT = 35000,  3 
+BBOUND, BCOUNT = 36500,  3  
+CBOUND, CCOUNT = None,   2
 LEX_EN = "../resources/lexwords/lex_filter_2.txt"
 
 LEGS_EN = (

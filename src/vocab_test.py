@@ -179,6 +179,7 @@ class Test:
     def __init__(self, lexname, legs, debug=False):
         self.lex = []
         self.legs = legs
+        self.finished = False
         self.questions = []
         self.current = 0      # current question
         self.maxscore = 0.0   # maximum test score
@@ -211,17 +212,20 @@ class Test:
 
     def next_question(self):
         self.current += 1
+        if self.current >= self.totalquestions: 
+            self.finished = True
     
     def prev_question(self):
         self.current -= 1
+        self.finished = False
     
     def show_all_questions(self):
         for q in self.questions:
             print("%s\n-----" % (q))
     
     def answer_question(self, response):
-        self.questionscores[self.current] = self.questions[self.current].answer(response)
-        self.next_question()
+        if not self.finished:
+            self.questionscores[self.current] = self.questions[self.current].answer(response)
     
     def finish(self):
         self.rawscore = sum(self.questionscores)
